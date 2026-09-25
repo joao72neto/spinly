@@ -1,16 +1,16 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 import {
   useSharedValue,
   withTiming,
   Easing,
   runOnJS,
-} from 'react-native-reanimated';
-import type { RouletteItem } from '../types/roulette';
+} from "react-native-reanimated";
+import type { RouletteItem } from "../types/roulette";
 import {
   computeSliceGeometry,
   weightedRandomSelect,
   calculateTargetRotation,
-} from '../utils/math';
+} from "../utils/math";
 
 interface SpinResult {
   item: RouletteItem;
@@ -56,20 +56,27 @@ export function useRouletteSpin(): UseRouletteSpinReturn {
       if (!selection) return false;
 
       const geometries = computeSliceGeometry(items);
-      const targetRotation = calculateTargetRotation(
+
+      // ângulo (0-360) em que a fatia fica sob o pointer, assumindo rotação = 0
+      const pointerAlignmentAngle = calculateTargetRotation(
         geometries,
-        selection.item.id
+        selection.item.id,
       );
+
+      const currentNormalized = ((rotation.value % 360) + 360) % 360;
+
+      // quanto girar a partir da posição atual pra chegar no ângulo certo
+      const angleDelta =
+        (((pointerAlignmentAngle - currentNormalized) % 360) + 360) % 360;
+
+      const EXTRA_SPINS = 5; // voltas extras só de efeito visual
+      const totalDelta = angleDelta + EXTRA_SPINS * 360;
 
       setIsSpinning(true);
       setResult(null);
 
-      // Normalize current rotation to avoid huge accumulated values
-      const currentNormalized = rotation.value % 360;
-      rotation.value = currentNormalized;
-
       rotation.value = withTiming(
-        currentNormalized + targetRotation,
+        rotation.value + totalDelta,
         {
           duration: SPIN_DURATION_MS,
           easing: Easing.out(Easing.cubic),
@@ -78,12 +85,12 @@ export function useRouletteSpin(): UseRouletteSpinReturn {
           if (finished) {
             runOnJS(onSpinComplete)(selection.item);
           }
-        }
+        },
       );
 
       return true;
     },
-    [isSpinning, rotation, onSpinComplete]
+    [isSpinning, rotation, onSpinComplete],
   );
 
   const clearResult = useCallback(() => {
