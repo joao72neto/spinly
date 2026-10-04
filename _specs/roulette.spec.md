@@ -46,8 +46,8 @@ O projeto consiste no desenvolvimento de um aplicativo móvel em React Native vo
 
 ## Edge Cases (Casos Extremos)
 
-- **EC01 - Roleta Vazia ou com Menos de 2 Itens Ativos:** Tentativa de girar uma roleta sem itens suficientes ativados.
-  - _Solução:_ O botão de girar deve ficar desabilitado e exibir um aviso orientando a reativar/adicionar itens.
+- **EC01 - Roleta Vazia ou sem Itens Ativos:** Tentativa de girar uma roleta sem nenhum item ativo.
+  - _Solução:_ O botão de girar deve ficar desabilitado e exibir um aviso orientando a reativar/adicionar itens ("⚠️ Ative pelo menos 1 item para girar").
 - **EC02 - Soma dos Pesos Igual a Zero:** Definir peso 0 para todos os itens ativos causaria divisão por zero no cálculo de probabilidade.
   - _Solução:_ Tratar o peso mínimo de criação/edição como 1, ou interpretar peso 0 automaticamente como item desabilitado.
 - **EC03 - Densidade Excessiva de Itens:** Cadastro de dezenas de itens tornando as fatias ilegíveis ou difíceis de clicar.

@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet, FlatList } from "react-native";
 import type { RouletteItem } from "../../types/roulette";
+import { router } from "expo-router";
 
 interface ItemListProps {
   items: RouletteItem[];
@@ -60,12 +61,18 @@ export function ItemList({
             <Text style={styles.actionIcon}>👁️</Text>
           </Pressable>
         )}
-        <Pressable
-          style={styles.actionButton}
-          onPress={() => onToggleEnabled(item.id)}
-        >
-          <Text style={styles.actionIcon}>{item.isEnabled ? "⏸️" : "▶️"}</Text>
-        </Pressable>
+
+        {(!item.isEnabled ||
+          items.some((i) => i.isEnabled && i.id !== item.id)) && (
+          <Pressable
+            style={styles.actionButton}
+            onPress={() => onToggleEnabled(item.id)}
+          >
+            <Text style={styles.actionIcon}>
+              {item.isEnabled ? "⏸️" : "▶️"}
+            </Text>
+          </Pressable>
+        )}
         <Pressable style={styles.actionButton} onPress={() => onEdit(item)}>
           <Text style={styles.actionIcon}>✏️</Text>
         </Pressable>

@@ -5,7 +5,7 @@ interface ResultModalProps {
   visible: boolean;
   item: RouletteItem | null;
   onSpinAgain: () => void;
-  onHideItem: (itemId: string) => void;
+  onHideItem?: (itemId: string) => void;
   onClose: () => void;
 }
 
@@ -45,12 +45,14 @@ export function ResultModal({
               <Text style={styles.buttonText}>Girar Novamente</Text>
             </Pressable>
 
-            <Pressable
-              style={[styles.button, styles.warningButton]}
-              onPress={() => onHideItem(item.id)}
-            >
-              <Text style={styles.buttonText}>Esconder Item</Text>
-            </Pressable>
+            {onHideItem && (
+              <Pressable
+                style={[styles.button, styles.warningButton]}
+                onPress={() => onHideItem(item.id)}
+              >
+                <Text style={styles.buttonText}>Esconder Item</Text>
+              </Pressable>
+            )}
 
             <Pressable
               style={[styles.button, styles.secondaryButton]}

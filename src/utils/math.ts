@@ -152,6 +152,17 @@ export function describeArc(
   startAngle: number,
   endAngle: number
 ): string {
+  // Quando a fatia ocupa 360°, início e fim coincidem e o SVG ignora o arco.
+  // Desenhamos um círculo completo usando dois arcos de 180°.
+  if (endAngle - startAngle >= 360) {
+    return [
+      `M ${cx} ${cy - radius}`,
+      `A ${radius} ${radius} 0 1 1 ${cx} ${cy + radius}`,
+      `A ${radius} ${radius} 0 1 1 ${cx} ${cy - radius}`,
+      'Z',
+    ].join(' ');
+  }
+
   const startRad = degreesToRadians(startAngle - 90); // Rotate so 0° = top
   const endRad = degreesToRadians(endAngle - 90);
 
@@ -200,7 +211,7 @@ export function weightedRandomSelect(
   items: RouletteItem[]
 ): { item: RouletteItem; activeIndex: number } | null {
   const active = getActiveItems(items);
-  if (active.length < 2) return null;
+  if (active.length < 1) return null;
 
   const totalWeight = active.reduce((sum, item) => sum + item.weight, 0);
   if (totalWeight === 0) return null;

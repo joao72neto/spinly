@@ -23,7 +23,7 @@ interface UseRouletteSpinReturn {
   isSpinning: boolean;
   /** The result of the last spin, or null */
   result: SpinResult | null;
-  /** Trigger a spin — returns false if not enough active items */
+  /** Trigger a spin — returns false if no active items or already spinning */
   spin: (items: RouletteItem[]) => boolean;
   /** Clear the result (e.g., after dismissing the modal) */
   clearResult: () => void;

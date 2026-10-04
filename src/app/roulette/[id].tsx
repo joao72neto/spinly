@@ -52,7 +52,7 @@ export default function RouletteScreen() {
     if (!success) {
       Alert.alert(
         "Itens insuficientes",
-        "Ative pelo menos 2 itens para girar a roleta.",
+        "Ative pelo menos 1 item para girar a roleta.",
       );
     }
   };
@@ -82,7 +82,7 @@ export default function RouletteScreen() {
   }
 
   const activeItems = getActiveItems(roulette.items);
-  const canSpin = activeItems.length >= 2;
+  const canSpin = activeItems.length >= 1;
   const hasHiddenItems = roulette.items.some((i) => i.isHidden);
 
   return (
@@ -106,31 +106,33 @@ export default function RouletteScreen() {
 
           {!canSpin && roulette.items.length > 0 && (
             <Text style={styles.warningText}>
-              ⚠️ Ative pelo menos 2 itens para girar
+              ⚠️ Ative pelo menos 1 item para girar
             </Text>
           )}
         </View>
       )}
 
       <View style={styles.bottomBar}>
-        {hasHiddenItems && (
+        {hasHiddenItems && !isSpinning && (
           <Pressable style={styles.resetButton} onPress={resetAllVisibility}>
             <Text style={styles.resetText}>🔄 Restaurar Todos</Text>
           </Pressable>
         )}
 
         <View style={styles.mainActions}>
-          <Pressable
-            style={styles.editButton}
-            onPress={() =>
-              router.push({
-                pathname: "/roulette/edit/[id]",
-                params: { id: roulette.id },
-              })
-            }
-          >
-            <Text style={styles.editButtonText}>✏️ Editar</Text>
-          </Pressable>
+          {!isSpinning && (
+            <Pressable
+              style={styles.editButton}
+              onPress={() =>
+                router.push({
+                  pathname: "/roulette/edit/[id]",
+                  params: { id: roulette.id },
+                })
+              }
+            >
+              <Text style={styles.editButtonText}>✏️ Editar</Text>
+            </Pressable>
+          )}
 
           <Pressable
             style={[
@@ -151,7 +153,7 @@ export default function RouletteScreen() {
         visible={!!result}
         item={result?.item ?? null}
         onSpinAgain={handleSpinAgain}
-        onHideItem={handleHideItem}
+        onHideItem={activeItems.length > 1 ? handleHideItem : undefined}
         onClose={clearResult}
       />
     </View>
