@@ -46,7 +46,9 @@ export function ItemFormModal({
     if (visible) {
       setLabel(initialLabel);
       setWeightText(String(initialWeight));
-      setSelectedColor(initialColor ?? colors[0]);
+      setSelectedColor(
+        initialColor ?? colors[Math.floor(Math.random() * colors.length)],
+      );
     }
   }, [visible, initialLabel, initialWeight, initialColor]);
 
@@ -99,12 +101,7 @@ export function ItemFormModal({
           />
 
           <Text style={styles.label}>Cor</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.colorRow}
-            contentContainerStyle={styles.colorRowContent}
-          >
+          <View style={styles.colorForm}>
             {colors.map((color) => (
               <Pressable
                 key={color}
@@ -116,7 +113,7 @@ export function ItemFormModal({
                 onPress={() => setSelectedColor(color)}
               />
             ))}
-          </ScrollView>
+          </View>
 
           <View style={styles.actions}>
             <Pressable style={styles.cancelButton} onPress={onCancel}>
@@ -181,14 +178,14 @@ const styles = StyleSheet.create({
   weightInput: {
     width: 100,
   },
-  colorRow: {
-    marginTop: 8,
-    maxHeight: 44,
-  },
-  colorRowContent: {
+  colorForm: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
-    paddingVertical: 4,
   },
+
   colorSwatch: {
     width: 36,
     height: 36,
