@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
   useWindowDimensions,
+  Animated,
 } from "react-native";
 import {
   useLocalSearchParams,
@@ -20,6 +21,11 @@ import { getActiveItems } from "../../utils/math";
 import { Wheel } from "../../components/roulette/Wheel";
 import { ResultModal } from "../../components/roulette/ResultModal";
 import { EmptyState } from "../../components/ui/EmptyState";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
+
+import Spin from "@/components/Spin";
 
 export default function RouletteScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -115,7 +121,10 @@ export default function RouletteScreen() {
       <View style={styles.bottomBar}>
         {hasHiddenItems && !isSpinning && (
           <Pressable style={styles.resetButton} onPress={resetAllVisibility}>
-            <Text style={styles.resetText}>🔄 Restaurar Todos</Text>
+            <Text style={styles.resetText}>
+              <MaterialIcons name="restore" size={24} />
+              Restaurar Todos
+            </Text>
           </Pressable>
         )}
 
@@ -130,7 +139,9 @@ export default function RouletteScreen() {
                 })
               }
             >
-              <Text style={styles.editButtonText}>✏️ Editar</Text>
+              <Text style={styles.editButtonText}>
+                <FontAwesome6 name="edit" size={20} /> Editar
+              </Text>
             </Pressable>
           )}
 
@@ -143,7 +154,19 @@ export default function RouletteScreen() {
             disabled={!canSpin || isSpinning}
           >
             <Text style={styles.spinButtonText}>
-              {isSpinning ? "🎡 Girando..." : "🎰 Girar!"}
+              {isSpinning ? (
+                <Text style={styles.spinButtonIcon}>
+                  <Spin>
+                    <FontAwesome6 name="arrows-spin" size={24} />
+                  </Spin>
+                  Girando...
+                </Text>
+              ) : (
+                <Text style={styles.spinButtonIcon}>
+                  <FontAwesome6 name="arrows-spin" size={24} />
+                  Girar!
+                </Text>
+              )}
             </Text>
           </Pressable>
         </View>
@@ -194,6 +217,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   resetText: {
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
     fontSize: 14,
     color: "#64748B",
     fontWeight: "600",
@@ -237,5 +263,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     color: "#FFFFFF",
+  },
+  spinButtonIcon: {
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
   },
 });

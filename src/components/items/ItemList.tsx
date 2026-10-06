@@ -1,6 +1,7 @@
 import { View, Text, Pressable, StyleSheet, FlatList } from "react-native";
 import type { RouletteItem } from "../../types/roulette";
-import { router } from "expo-router";
+import Feather from "@expo/vector-icons/Feather";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 interface ItemListProps {
   items: RouletteItem[];
@@ -58,7 +59,9 @@ export function ItemList({
             style={styles.actionButton}
             onPress={() => onToggleHidden(item.id)}
           >
-            <Text style={styles.actionIcon}>👁️</Text>
+            <Text style={styles.actionIcon}>
+              <Feather name="eye" size={24} color="green" />
+            </Text>
           </Pressable>
         )}
 
@@ -69,18 +72,26 @@ export function ItemList({
             onPress={() => onToggleEnabled(item.id)}
           >
             <Text style={styles.actionIcon}>
-              {item.isEnabled ? "⏸️" : "▶️"}
+              {item.isEnabled ? (
+                <AntDesign name="pause-circle" size={24} />
+              ) : (
+                <AntDesign name="play-circle" size={24} />
+              )}
             </Text>
           </Pressable>
         )}
         <Pressable style={styles.actionButton} onPress={() => onEdit(item)}>
-          <Text style={styles.actionIcon}>✏️</Text>
+          <Text style={styles.actionIcon}>
+            <Feather name="edit-3" size={24} />
+          </Text>
         </Pressable>
         <Pressable
           style={styles.actionButton}
           onPress={() => onDelete(item.id)}
         >
-          <Text style={styles.actionIcon}>🗑️</Text>
+          <Text style={styles.actionIcon}>
+            <Feather name="trash-2" size={24} color="red" />
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -170,5 +181,6 @@ const styles = StyleSheet.create({
   },
   actionIcon: {
     fontSize: 18,
+    color: "#475569",
   },
 });

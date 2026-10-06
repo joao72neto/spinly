@@ -13,6 +13,8 @@ import { ItemList } from "../../../components/items/ItemList";
 import { ItemFormModal } from "../../../components/items/ItemFormModal";
 import { EmptyState } from "../../../components/ui/EmptyState";
 import type { RouletteItem } from "../../../types/roulette";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function EditRouletteScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -91,7 +93,8 @@ export default function EditRouletteScreen() {
           {hasHiddenOrDisabled && (
             <Pressable style={styles.resetBar} onPress={resetAllVisibility}>
               <Text style={styles.resetBarText}>
-                🔄 Restaurar todos os itens
+                <MaterialIcons name="restore" size={24} />
+                Restaurar todos os itens
               </Text>
             </Pressable>
           )}
@@ -106,7 +109,10 @@ export default function EditRouletteScreen() {
       )}
 
       <Pressable style={styles.addButton} onPress={() => setShowForm(true)}>
-        <Text style={styles.addButtonText}>+ Adicionar Item</Text>
+        <Text style={styles.addButtonText}>
+          <AntDesign name="plus" size={24} />
+          Adicionar Item
+        </Text>
       </Pressable>
 
       {/* Add Item Modal */}
@@ -152,6 +158,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   resetBarText: {
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
     fontSize: 14,
     color: "#3B82F6",
     fontWeight: "600",
@@ -170,6 +179,9 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   addButtonText: {
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
     fontSize: 16,
     fontWeight: "700",
     color: "#FFFFFF",
