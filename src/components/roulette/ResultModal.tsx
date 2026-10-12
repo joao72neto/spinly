@@ -1,5 +1,9 @@
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import type { RouletteItem } from "../../types/roulette";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Fontisto from "@expo/vector-icons/Fontisto";
+import Feather from "@expo/vector-icons/Feather";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 interface ResultModalProps {
   visible: boolean;
@@ -31,6 +35,10 @@ export function ResultModal({
     >
       <Pressable style={styles.overlay} onPress={onClose}>
         <Pressable style={styles.card} onPress={(e) => e.stopPropagation()}>
+          <Pressable onPress={onClose} style={styles.closeButton}>
+            <AntDesign name="close-circle" size={24} />
+          </Pressable>
+
           <Text style={styles.emoji}>🎉</Text>
           <Text style={styles.title}>Resultado</Text>
           <View style={[styles.resultBadge, { backgroundColor: item.color }]}>
@@ -42,26 +50,23 @@ export function ResultModal({
               style={[styles.button, styles.primaryButton]}
               onPress={onSpinAgain}
             >
-              <Text style={styles.buttonText}>Girar Novamente</Text>
+              <Text style={styles.buttonText}>
+                <Fontisto name="spinner-rotate-forward" size={18} />
+                Girar novamente
+              </Text>
             </Pressable>
 
             {onHideItem && (
               <Pressable
-                style={[styles.button, styles.warningButton]}
+                style={[styles.button, styles.secondaryButton]}
                 onPress={() => onHideItem(item.id)}
               >
-                <Text style={styles.buttonText}>Esconder Item</Text>
+                <Text style={styles.buttonText}>
+                  <Feather name="eye-off" size={18} />
+                  Esconder item
+                </Text>
               </Pressable>
             )}
-
-            <Pressable
-              style={[styles.button, styles.secondaryButton]}
-              onPress={onClose}
-            >
-              <Text style={[styles.buttonText, styles.secondaryText]}>
-                Fechar
-              </Text>
-            </Pressable>
           </View>
         </Pressable>
       </Pressable>
@@ -78,6 +83,7 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   card: {
+    position: "relative",
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
     padding: 28,
@@ -89,6 +95,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 12,
     elevation: 8,
+  },
+
+  closeButton: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+
+    color: "#475569",
   },
   emoji: {
     fontSize: 48,
@@ -107,6 +121,8 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     minWidth: 160,
     alignItems: "center",
+
+    boxShadow: "2px 2px 20px #D1D1D1",
   },
   resultText: {
     fontSize: 20,
@@ -114,6 +130,12 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   actions: {
+    display: "flex",
+
+    borderTopColor: "#EBEBEB",
+    borderTopWidth: 1.8,
+    paddingTop: 20,
+
     width: "100%",
     gap: 10,
   },
@@ -124,19 +146,21 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: "#4ECDC4",
-  },
-  warningButton: {
-    backgroundColor: "#FF9671",
+    flex: 1,
   },
   secondaryButton: {
-    backgroundColor: "#F1F5F9",
+    backgroundColor: "#4E56CD",
+    flex: 1,
   },
+
   buttonText: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+
     fontSize: 16,
     fontWeight: "600",
     color: "#FFFFFF",
-  },
-  secondaryText: {
-    color: "#64748B",
   },
 });

@@ -17,6 +17,7 @@ import { useRouletteList } from "../hooks/useRouletteStorage";
 import { EmptyState } from "../components/ui/EmptyState";
 import type { Roulette } from "../types/roulette";
 import Fontisto from "@expo/vector-icons/Fontisto";
+import { Image } from "react-native";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -104,11 +105,10 @@ export default function HomeScreen() {
         options={{
           title: "Spinly",
           headerLeft: () => (
-            <Fontisto
-              style={{ paddingLeft: 16, paddingRight: 8 }}
-              name="spinner-refresh"
-              size={24}
-              color="white"
+            <Image
+              source={require("../../assets/images/spinly-icon.png")}
+              style={{ width: 50, height: 50 }}
+              resizeMode="contain"
             />
           ),
         }}
