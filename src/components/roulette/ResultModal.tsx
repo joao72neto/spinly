@@ -50,10 +50,14 @@ export function ResultModal({
               style={[styles.button, styles.primaryButton]}
               onPress={onSpinAgain}
             >
-              <Text style={styles.buttonText}>
-                <Fontisto name="spinner-rotate-forward" size={18} />
-                Girar novamente
-              </Text>
+              <View style={styles.buttonContent}>
+                <Fontisto
+                  color="white"
+                  name="spinner-rotate-forward"
+                  size={18}
+                />
+                <Text style={styles.buttonText}>Girar novamente</Text>
+              </View>
             </Pressable>
 
             {onHideItem && (
@@ -61,10 +65,10 @@ export function ResultModal({
                 style={[styles.button, styles.secondaryButton]}
                 onPress={() => onHideItem(item.id)}
               >
-                <Text style={styles.buttonText}>
-                  <Feather name="eye-off" size={18} />
-                  Esconder item
-                </Text>
+                <View style={styles.buttonContent}>
+                  <Feather color="white" name="eye-off" size={18} />
+                  <Text style={styles.buttonText}>Esconder item</Text>
+                </View>
               </Pressable>
             )}
           </View>
@@ -144,23 +148,22 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
   },
-  primaryButton: {
-    backgroundColor: "#4ECDC4",
-    flex: 1,
-  },
-  secondaryButton: {
-    backgroundColor: "#4E56CD",
-    flex: 1,
-  },
-
-  buttonText: {
+  buttonContent: {
     display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#FFFFFF",
+  },
+  buttonText: {
+    fontSize: 17,
+    fontWeight: 600,
+    color: "white",
+  },
+  primaryButton: {
+    backgroundColor: "#4ECDC4",
+  },
+  secondaryButton: {
+    backgroundColor: "#4E56CD",
   },
 });

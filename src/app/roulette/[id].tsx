@@ -121,10 +121,10 @@ export default function RouletteScreen() {
       <View style={styles.bottomBar}>
         {hasHiddenItems && !isSpinning && (
           <Pressable style={styles.resetButton} onPress={resetAllVisibility}>
-            <Text style={styles.resetText}>
+            <View style={styles.resetButtonContent}>
               <MaterialIcons name="restore" size={24} />
-              Restaurar Todos
-            </Text>
+              <Text>Restaurar Todos</Text>
+            </View>
           </Pressable>
         )}
 
@@ -153,21 +153,19 @@ export default function RouletteScreen() {
             onPress={handleSpin}
             disabled={!canSpin || isSpinning}
           >
-            <Text style={styles.spinButtonText}>
-              {isSpinning ? (
-                <Text style={styles.spinButtonIcon}>
-                  <Spin>
-                    <FontAwesome6 name="arrows-spin" size={24} />
-                  </Spin>
-                  Girando...
-                </Text>
-              ) : (
-                <Text style={styles.spinButtonIcon}>
-                  <FontAwesome6 name="arrows-spin" size={24} />
-                  Girar!
-                </Text>
-              )}
-            </Text>
+            {isSpinning ? (
+              <View style={styles.spinButtonContent}>
+                <Spin>
+                  <FontAwesome6 color="white" name="arrows-spin" size={24} />
+                </Spin>
+                <Text style={styles.spinButtonText}>Girando...</Text>
+              </View>
+            ) : (
+              <View style={styles.spinButtonContent}>
+                <FontAwesome6 color="white" name="arrows-spin" size={24} />
+                <Text style={styles.spinButtonText}>Girar!</Text>
+              </View>
+            )}
           </Pressable>
         </View>
       </View>
@@ -216,8 +214,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
   },
-  resetText: {
+  resetButtonContent: {
     display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     gap: 6,
     fontSize: 14,
@@ -254,19 +253,20 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 6,
   },
+  spinButtonContent: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  spinButtonText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: 800,
+  },
   spinButtonDisabled: {
     backgroundColor: "#CBD5E1",
     shadowOpacity: 0,
     elevation: 0,
-  },
-  spinButtonText: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#FFFFFF",
-  },
-  spinButtonIcon: {
-    display: "flex",
-    alignItems: "center",
-    gap: 6,
   },
 });

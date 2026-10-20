@@ -92,10 +92,12 @@ export default function EditRouletteScreen() {
         <View style={styles.listWrapper}>
           {hasHiddenOrDisabled && (
             <Pressable style={styles.resetBar} onPress={resetAllVisibility}>
-              <Text style={styles.resetBarText}>
-                <MaterialIcons name="restore" size={24} />
-                Restaurar todos os itens
-              </Text>
+              <View style={styles.resetBarContent}>
+                <MaterialIcons color="#3B82F6" name="restore" size={24} />
+                <Text style={styles.resetBarText}>
+                  Restaurar todos os itens
+                </Text>
+              </View>
             </Pressable>
           )}
           <ItemList
@@ -109,20 +111,18 @@ export default function EditRouletteScreen() {
       )}
 
       <Pressable style={styles.addButton} onPress={() => setShowForm(true)}>
-        <Text style={styles.addButtonText}>
-          <AntDesign name="plus" size={24} />
-          Adicionar Item
-        </Text>
+        <View style={styles.addButtonContent}>
+          <AntDesign color="#FFFFFF" name="plus" size={24} />
+          <Text style={styles.addButtonText}>Adicionar Item</Text>
+        </View>
       </Pressable>
 
-      {/* Add Item Modal */}
       <ItemFormModal
         visible={showForm}
         onSubmit={handleAdd}
         onCancel={() => setShowForm(false)}
       />
 
-      {/* Edit Item Modal */}
       <ItemFormModal
         visible={!!editingItem}
         initialLabel={editingItem?.label}
@@ -157,13 +157,16 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     alignItems: "center",
   },
-  resetBarText: {
+  resetBarContent: {
     display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     gap: 6,
     fontSize: 14,
-    color: "#3B82F6",
     fontWeight: "600",
+  },
+  resetBarText: {
+    color: "#3B82F6",
   },
   addButton: {
     margin: 16,
@@ -178,12 +181,18 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 6,
   },
-  addButtonText: {
+  addButtonContent: {
     display: "flex",
+    flexDirection: "row",
     alignItems: "center",
     gap: 6,
     fontSize: 16,
     fontWeight: "700",
+  },
+
+  addButtonText: {
     color: "#FFFFFF",
+    fontSize: 17,
+    fontWeight: 600
   },
 });
