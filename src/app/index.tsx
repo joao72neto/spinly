@@ -16,8 +16,8 @@ import { useCallback } from "react";
 import { useRouletteList } from "../hooks/useRouletteStorage";
 import { EmptyState } from "../components/ui/EmptyState";
 import type { Roulette } from "../types/roulette";
-import Fontisto from "@expo/vector-icons/Fontisto";
 import { Image } from "react-native";
+import Feather from "@expo/vector-icons/Feather";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -76,7 +76,6 @@ export default function HomeScreen() {
             params: { id: item.id },
           })
         }
-        onLongPress={() => handleDelete(item)}
       >
         <View style={styles.cardHeader}>
           <Text style={styles.cardTitle}>{item.title}</Text>
@@ -84,9 +83,22 @@ export default function HomeScreen() {
             {activeCount}/{totalCount} itens
           </Text>
         </View>
-        <Text style={styles.cardHint}>
-          Toque para abrir • Segure para excluir
-        </Text>
+        <View style={styles.cardFooter}>
+          <Text style={styles.cardHint}>Toque para abrir</Text>
+          <View style={styles.cardActions}>
+            <Pressable style={styles.cardActionButton}>
+              <Feather name="edit-3" size={12} />
+              <Text>Editar</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => handleDelete(item)}
+              style={styles.cardActionButton}
+            >
+              <Feather name="trash-2" size={12} />
+              <Text>Excluir</Text>
+            </Pressable>
+          </View>
+        </View>
       </Pressable>
     );
   };
@@ -231,10 +243,36 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginLeft: 8,
   },
+  cardFooter: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   cardHint: {
+    color: "#64748B",
+    fontSize: 12,
+  },
+  cardActions: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "space-between",
     fontSize: 12,
     color: "#94A3B8",
     marginTop: 8,
+  },
+  cardActionButton: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+    backgroundColor: "#CFCFCF",
+    paddingLeft: 12,
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingRight: 12,
+    borderRadius: 10,
   },
   fab: {
     position: "absolute",
