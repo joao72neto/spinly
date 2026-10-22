@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   Alert,
   useWindowDimensions,
-  Animated,
 } from "react-native";
 import {
   useLocalSearchParams,
@@ -23,7 +22,6 @@ import { ResultModal } from "../../components/roulette/ResultModal";
 import { EmptyState } from "../../components/ui/EmptyState";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
 
 import Spin from "@/components/Spin";
 

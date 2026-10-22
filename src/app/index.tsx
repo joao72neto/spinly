@@ -21,11 +21,18 @@ import Feather from "@expo/vector-icons/Feather";
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { roulettes, isLoading, reload, createRoulette, removeRoulette } =
-    useRouletteList();
+  const {
+    roulettes,
+    isLoading,
+    reload,
+    createRoulette,
+    removeRoulette,
+    updateRoulette,
+  } = useRouletteList();
 
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newTitle, setNewTitle] = useState("");
+  const [showCreateEditModal, setShowCreateEditModal] = useState(false);
+  const [updatingItem, setUpdatingItem] = useState<Roulette | null>(null);
+  const [rouletteTitle, setRouletteTitle] = useState("");
 
   // Reload data whenever the screen gains focus
   useFocusEffect(
@@ -35,15 +42,30 @@ export default function HomeScreen() {
   );
 
   const handleCreate = async () => {
-    const trimmed = newTitle.trim();
+    const trimmed = rouletteTitle.trim();
     if (!trimmed) return;
     const created = await createRoulette(trimmed);
-    setShowCreateModal(false);
-    setNewTitle("");
+    setShowCreateEditModal(false);
+    setRouletteTitle("");
     router.push({
       pathname: "/roulette/[id]",
       params: { id: created.id },
     });
+  };
+
+  const handleEdit = async (roulette: Roulette) => {
+    setRouletteTitle(roulette.title);
+    setShowCreateEditModal(true);
+    setUpdatingItem(roulette);
+  };
+
+  const handleConfirmEdit = async (title: string) => {
+    if (!updatingItem) return;
+    await updateRoulette({
+      title,
+      newRoulette: updatingItem,
+    });
+    handleCloseModal();
   };
 
   const handleDelete = (roulette: Roulette) => {
@@ -59,6 +81,12 @@ export default function HomeScreen() {
         },
       ],
     );
+  };
+
+  const handleCloseModal = () => {
+    setUpdatingItem(null);
+    setShowCreateEditModal(false);
+    setRouletteTitle("");
   };
 
   const renderItem = ({ item }: { item: Roulette }) => {
@@ -86,7 +114,10 @@ export default function HomeScreen() {
         <View style={styles.cardFooter}>
           <Text style={styles.cardHint}>Toque para abrir</Text>
           <View style={styles.cardActions}>
-            <Pressable style={styles.cardActionButton}>
+            <Pressable
+              onPress={() => handleEdit(item)}
+              style={styles.cardActionButton}
+            >
               <Feather name="edit-3" size={12} />
               <Text>Editar</Text>
             </Pressable>
@@ -143,42 +174,48 @@ export default function HomeScreen() {
       )}
 
       {/* FAB */}
-      <Pressable style={styles.fab} onPress={() => setShowCreateModal(true)}>
+      <Pressable
+        style={styles.fab}
+        onPress={() => setShowCreateEditModal(true)}
+      >
         <Text style={styles.fabText}>+</Text>
       </Pressable>
 
-      {/* Create Modal */}
+      {/* Create or Edit Modal */}
       <Modal
-        visible={showCreateModal}
+        visible={showCreateEditModal}
         transparent
         animationType="slide"
-        onRequestClose={() => setShowCreateModal(false)}
+        onRequestClose={handleCloseModal}
       >
-        <Pressable
-          style={styles.modalOverlay}
-          onPress={() => setShowCreateModal(false)}
-        >
+        <Pressable style={styles.modalOverlay} onPress={handleCloseModal}>
           <Pressable
             style={styles.modalCard}
             onPress={(e) => e.stopPropagation()}
           >
-            <Text style={styles.modalTitle}>Nova Roleta</Text>
+            <Text style={styles.modalTitle}>
+              {updatingItem ? "Editar Roleta" : "Nova Roleta"}
+            </Text>
             <TextInput
               style={styles.modalInput}
-              value={newTitle}
-              onChangeText={setNewTitle}
+              value={rouletteTitle}
+              onChangeText={setRouletteTitle}
               placeholder="Ex: O que comer hoje?"
               placeholderTextColor="#94A3B8"
               autoFocus
               maxLength={40}
-              onSubmitEditing={handleCreate}
+              onSubmitEditing={
+                updatingItem
+                  ? () => handleConfirmEdit(rouletteTitle)
+                  : handleCreate
+              }
             />
             <View style={styles.modalActions}>
               <Pressable
                 style={styles.modalCancel}
                 onPress={() => {
-                  setShowCreateModal(false);
-                  setNewTitle("");
+                  setShowCreateEditModal(false);
+                  setRouletteTitle("");
                 }}
               >
                 <Text style={styles.modalCancelText}>Cancelar</Text>
@@ -186,12 +223,18 @@ export default function HomeScreen() {
               <Pressable
                 style={[
                   styles.modalSubmit,
-                  !newTitle.trim() && styles.modalSubmitDisabled,
+                  !rouletteTitle.trim() && styles.modalSubmitDisabled,
                 ]}
-                onPress={handleCreate}
-                disabled={!newTitle.trim()}
+                onPress={
+                  updatingItem
+                    ? () => handleConfirmEdit(rouletteTitle)
+                    : handleCreate
+                }
+                disabled={!rouletteTitle.trim()}
               >
-                <Text style={styles.modalSubmitText}>Criar</Text>
+                <Text style={styles.modalSubmitText}>
+                  {updatingItem ? "Confirmar" : "Criar"}
+                </Text>
               </Pressable>
             </View>
           </Pressable>

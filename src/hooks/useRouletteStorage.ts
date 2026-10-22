@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { Roulette, RouletteItem } from '../types/roulette';
+import { useState, useEffect, useCallback } from "react";
+import type { Roulette, RouletteItem } from "../types/roulette";
 import {
   loadRoulettes,
   saveRoulettes,
   loadRouletteById,
   saveRoulette,
   deleteRoulette as deleteRouletteFromStorage,
-} from '../utils/storage';
-import { generateId } from '../utils/math';
-import { getSliceColor } from '../utils/colors';
+} from "../utils/storage";
+import { generateId } from "../utils/math";
+import { getSliceColor } from "../utils/colors";
 
 /**
  * Hook for managing the list of all roulettes (Home screen).
@@ -43,7 +43,35 @@ export function useRouletteList() {
       await saveRoulettes(updated);
       return newRoulette;
     },
-    [roulettes]
+    [roulettes],
+  );
+
+  const updateRoulette = useCallback(
+    async ({
+      title,
+      newRoulette,
+    }: {
+      title: string;
+      newRoulette: Roulette;
+    }) => {
+      const now = Date.now();
+      const updatedRoulette: Roulette = {
+        id: newRoulette.id,
+        title,
+        createdAt: newRoulette.createdAt,
+        updatedAt: now,
+        items: newRoulette.items,
+      };
+
+      const filteredRoulettes = roulettes.filter(
+        (old) => old.id !== newRoulette.id,
+      );
+      const updated = [...filteredRoulettes, updatedRoulette];
+      setRoulettes(updated);
+      await saveRoulettes(updated);
+      return updatedRoulette;
+    },
+    [roulettes],
   );
 
   const removeRoulette = useCallback(
@@ -52,10 +80,17 @@ export function useRouletteList() {
       setRoulettes(updated);
       await deleteRouletteFromStorage(id);
     },
-    [roulettes]
+    [roulettes],
   );
 
-  return { roulettes, isLoading, reload: load, createRoulette, removeRoulette };
+  return {
+    roulettes,
+    isLoading,
+    reload: load,
+    createRoulette,
+    removeRoulette,
+    updateRoulette,
+  };
 }
 
 /**
@@ -102,7 +137,7 @@ export function useRouletteDetail(rouletteId: string) {
       };
       await persist(updated);
     },
-    [roulette, persist]
+    [roulette, persist],
   );
 
   const removeItem = useCallback(
@@ -115,11 +150,14 @@ export function useRouletteDetail(rouletteId: string) {
       };
       await persist(updated);
     },
-    [roulette, persist]
+    [roulette, persist],
   );
 
   const updateItem = useCallback(
-    async (itemId: string, changes: Partial<Pick<RouletteItem, 'label' | 'weight' | 'color'>>) => {
+    async (
+      itemId: string,
+      changes: Partial<Pick<RouletteItem, "label" | "weight" | "color">>,
+    ) => {
       if (!roulette) return;
       const updated: Roulette = {
         ...roulette,
@@ -128,15 +166,18 @@ export function useRouletteDetail(rouletteId: string) {
             ? {
                 ...item,
                 ...changes,
-                weight: changes.weight !== undefined ? Math.max(1, changes.weight) : item.weight,
+                weight:
+                  changes.weight !== undefined
+                    ? Math.max(1, changes.weight)
+                    : item.weight,
               }
-            : item
+            : item,
         ),
         updatedAt: Date.now(),
       };
       await persist(updated);
     },
-    [roulette, persist]
+    [roulette, persist],
   );
 
   // --- State toggles ---
@@ -147,15 +188,13 @@ export function useRouletteDetail(rouletteId: string) {
       const updated: Roulette = {
         ...roulette,
         items: roulette.items.map((item) =>
-          item.id === itemId
-            ? { ...item, isEnabled: !item.isEnabled }
-            : item
+          item.id === itemId ? { ...item, isEnabled: !item.isEnabled } : item,
         ),
         updatedAt: Date.now(),
       };
       await persist(updated);
     },
-    [roulette, persist]
+    [roulette, persist],
   );
 
   const hideItem = useCallback(
@@ -164,15 +203,13 @@ export function useRouletteDetail(rouletteId: string) {
       const updated: Roulette = {
         ...roulette,
         items: roulette.items.map((item) =>
-          item.id === itemId
-            ? { ...item, isHidden: true }
-            : item
+          item.id === itemId ? { ...item, isHidden: true } : item,
         ),
         updatedAt: Date.now(),
       };
       await persist(updated);
     },
-    [roulette, persist]
+    [roulette, persist],
   );
 
   const unhideItem = useCallback(
@@ -181,15 +218,13 @@ export function useRouletteDetail(rouletteId: string) {
       const updated: Roulette = {
         ...roulette,
         items: roulette.items.map((item) =>
-          item.id === itemId
-            ? { ...item, isHidden: false }
-            : item
+          item.id === itemId ? { ...item, isHidden: false } : item,
         ),
         updatedAt: Date.now(),
       };
       await persist(updated);
     },
-    [roulette, persist]
+    [roulette, persist],
   );
 
   const resetAllVisibility = useCallback(async () => {
