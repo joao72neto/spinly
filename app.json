@@ -1,50 +1,44 @@
 {
   "expo": {
-    "name": "roulette",
+    "name": "Spinly",
     "slug": "joao-neto",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "roulette",
+    "icon": "./assets/images/spinly-icon-1024.png",
+    "scheme": "spinly",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.salve.joaoneto"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",
-        "foregroundImage": "./assets/images/spinly-icon.png"
+        "foregroundImage": "./assets/images/spinly-adaptive-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.salve.joaoneto"
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/spinly-favicon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/spinly-adaptive-foreground.png",
+          "imageWidth": 200
         }
       ],
       "expo-image",
       "expo-web-browser"
     ],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
-    },
+    "experiments": { "typedRoutes": true, "reactCompiler": true },
     "extra": {
       "router": {},
-      "eas": {
-        "projectId": "33a374db-b7f7-4c0b-94b0-f02ab902a008"
-      }
+      "eas": { "projectId": "33a374db-b7f7-4c0b-94b0-f02ab902a008" }
     },
     "owner": "salve-team"
   }

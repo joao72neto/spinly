@@ -149,7 +149,7 @@ export default function HomeScreen() {
           title: "Spinly",
           headerLeft: () => (
             <Image
-              source={require("../../assets/images/spinly-icon.png")}
+              source={require("../../assets/images/spinly-adaptive-foreground.png")}
               style={{ width: 50, height: 50 }}
               resizeMode="contain"
             />
