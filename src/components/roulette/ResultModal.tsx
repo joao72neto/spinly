@@ -1,6 +1,5 @@
 import { Modal, View, Text, Pressable, StyleSheet } from "react-native";
 import type { RouletteItem } from "../../types/roulette";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";

@@ -17,7 +17,7 @@ import {
 import { useRouletteDetail } from "../../hooks/useRouletteStorage";
 import { useRouletteSpin } from "../../hooks/useRouletteSpin";
 import { getActiveItems } from "../../utils/math";
-import { Wheel } from "../../components/roulette/Wheel";
+import { Wheel } from "../../components/roulette/wheel/Wheel";
 import { ResultModal } from "../../components/roulette/ResultModal";
 import { EmptyState } from "../../components/ui/EmptyState";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";

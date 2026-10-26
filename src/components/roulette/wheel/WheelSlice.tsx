@@ -1,7 +1,7 @@
 import { Path, Text as SvgText } from "react-native-svg";
-import type { SliceGeometry } from "../../utils/math";
-import { describeArc, getLabelPosition } from "../../utils/math";
-import { DISABLED_COLOR } from "../../utils/colors";
+import type { SliceGeometry } from "../../../utils/math";
+import { describeArc, getLabelPosition } from "../../../utils/math";
+import { DISABLED_COLOR } from "../../../utils/colors";
 
 interface WheelSliceProps {
   geometry: SliceGeometry;
@@ -45,8 +45,8 @@ export function WheelSlice({
         d={path}
         fill={fillColor}
         opacity={opacity}
-        stroke="#FFFFFF"
-        strokeWidth={2}
+        stroke={fillColor}
+        strokeWidth={1}
         onPress={() => onPress(item.id)}
       />
       <SvgText

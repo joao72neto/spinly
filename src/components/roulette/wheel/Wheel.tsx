@@ -1,36 +1,35 @@
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import Svg from "react-native-svg";
 import Animated, {
   useAnimatedStyle,
   type SharedValue,
 } from "react-native-reanimated";
-import type { RouletteItem } from "../../types/roulette";
-import { computeSliceGeometry } from "../../utils/math";
+import type { RouletteItem } from "@/types/roulette";
+import { computeSliceGeometry } from "@/utils/math";
 import { WheelSlice } from "./WheelSlice";
-import { Pointer } from "./Pointer";
+import { WheelFrame } from "./WheelFrame";
+import { Pointer, getPointerOverhang } from "./Pointer";
 
 interface WheelProps {
   items: RouletteItem[];
   rotation: SharedValue<number>;
-  size?: number;
+  size?: number; // diâmetro total da roleta, anel incluso
   onSlicePress: (itemId: string) => void;
 }
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-/**
- * The main roulette wheel component.
- * Renders all visible slices inside a rotating SVG and a fixed pointer on top.
- */
 export function Wheel({
   items,
   rotation,
   size = 300,
   onSlicePress,
 }: WheelProps) {
+  const ringWidth = size * 0.05;
+  const overhang = getPointerOverhang(size);
   const cx = size / 2;
   const cy = size / 2;
-  const radius = size / 2 - 4; // small padding for stroke
+  const sliceRadius = size / 2 - ringWidth + 1; // +1px: sobrepõe sob o anel
 
   const geometries = computeSliceGeometry(items);
 
@@ -39,8 +38,13 @@ export function Wheel({
   }));
 
   return (
-    <View style={[styles.container, { width: size, height: size }]}>
-      <AnimatedView style={[styles.wheelWrapper, animatedStyle]}>
+    <View style={{ width: size, height: size + overhang }}>
+      <AnimatedView
+        style={[
+          { width: size, height: size, marginTop: overhang },
+          animatedStyle,
+        ]}
+      >
         <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
           {geometries.map((geo) => (
             <WheelSlice
@@ -48,25 +52,15 @@ export function Wheel({
               geometry={geo}
               cx={cx}
               cy={cy}
-              radius={radius}
+              radius={sliceRadius}
               onPress={onSlicePress}
             />
           ))}
         </Svg>
       </AnimatedView>
-      <Pointer size={size} />
+
+      <WheelFrame size={size} ringWidth={ringWidth} top={overhang} />
+      <Pointer size={size} overhang={overhang} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  wheelWrapper: {
-    width: "100%",
-    height: "100%",
-  },
-});
