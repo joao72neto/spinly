@@ -18,6 +18,7 @@ import { EmptyState } from "../components/ui/EmptyState";
 import type { Roulette } from "../types/roulette";
 import { Image } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
+import BaseModal from "@/components/BaseModal";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -156,7 +157,6 @@ export default function HomeScreen() {
           ),
         }}
       />
-
       {roulettes.length === 0 ? (
         <EmptyState
           icon="🎰"
@@ -172,7 +172,6 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-
       {/* FAB */}
       <Pressable
         style={styles.fab}
@@ -180,7 +179,6 @@ export default function HomeScreen() {
       >
         <Text style={styles.fabText}>+</Text>
       </Pressable>
-
       {/* Create or Edit Modal */}
       <Modal
         visible={showCreateEditModal}
