@@ -6,7 +6,6 @@ import {
   TextInput,
   FlatList,
   Modal,
-  Alert,
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
@@ -33,6 +32,9 @@ export default function HomeScreen() {
 
   const [showCreateEditModal, setShowCreateEditModal] = useState(false);
   const [updatingItem, setUpdatingItem] = useState<Roulette | null>(null);
+  const [deletingRoulette, setDeletingRoulette] = useState<Roulette | null>(
+    null,
+  );
   const [rouletteTitle, setRouletteTitle] = useState("");
 
   // Reload data whenever the screen gains focus
@@ -70,18 +72,13 @@ export default function HomeScreen() {
   };
 
   const handleDelete = (roulette: Roulette) => {
-    Alert.alert(
-      "Excluir Roleta",
-      `Tem certeza que deseja excluir "${roulette.title}"?`,
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Excluir",
-          style: "destructive",
-          onPress: () => removeRoulette(roulette.id),
-        },
-      ],
-    );
+    setDeletingRoulette(roulette);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deletingRoulette) return;
+    await removeRoulette(deletingRoulette.id);
+    setDeletingRoulette(null);
   };
 
   const handleCloseModal = () => {
@@ -179,7 +176,7 @@ export default function HomeScreen() {
       >
         <Text style={styles.fabText}>+</Text>
       </Pressable>
-      {/* Create or Edit Modal */}
+
       <Modal
         visible={showCreateEditModal}
         transparent
@@ -238,6 +235,18 @@ export default function HomeScreen() {
           </Pressable>
         </Pressable>
       </Modal>
+
+      <BaseModal
+        visible={!!deletingRoulette}
+        title="Excluir Roleta"
+        icon="delete"
+        confirmVariant="danger"
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        message={`Tem certeza que deseja excluir "${deletingRoulette?.title}"?`}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeletingRoulette(null)}
+      />
     </View>
   );
 }

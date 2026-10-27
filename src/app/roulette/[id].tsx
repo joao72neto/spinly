@@ -1,11 +1,10 @@
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   View,
   Text,
   Pressable,
   StyleSheet,
   ActivityIndicator,
-  Alert,
   useWindowDimensions,
 } from "react-native";
 import {
@@ -24,6 +23,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import Spin from "@/components/Spin";
+import BaseModal from "@/components/BaseModal";
 
 export default function RouletteScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -40,6 +40,8 @@ export default function RouletteScreen() {
   } = useRouletteDetail(id!);
 
   const { rotation, isSpinning, result, spin, clearResult } = useRouletteSpin();
+  const [showInsufficientItemsModal, setShowInsufficientItemsModal] =
+    useState(false);
 
   // Reload data when returning from the edit screen
   useFocusEffect(
@@ -54,10 +56,7 @@ export default function RouletteScreen() {
     if (!roulette) return;
     const success = spin(roulette.items);
     if (!success) {
-      Alert.alert(
-        "Itens insuficientes",
-        "Ative pelo menos 1 item para girar a roleta.",
-      );
+      setShowInsufficientItemsModal(true);
     }
   };
 
@@ -174,6 +173,17 @@ export default function RouletteScreen() {
         onSpinAgain={handleSpinAgain}
         onHideItem={activeItems.length > 1 ? handleHideItem : undefined}
         onClose={clearResult}
+      />
+
+      <BaseModal
+        visible={showInsufficientItemsModal}
+        title="Itens insuficientes"
+        icon="warning"
+        message="Ative pelo menos 1 item para girar a roleta."
+        showCancelButton={false}
+        confirmText="Entendido"
+        onConfirm={() => setShowInsufficientItemsModal(false)}
+        onCancel={() => setShowInsufficientItemsModal(false)}
       />
     </View>
   );

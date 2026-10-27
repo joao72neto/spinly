@@ -3,7 +3,6 @@ import {
   View,
   Text,
   Pressable,
-  Alert,
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
@@ -11,6 +10,7 @@ import { useLocalSearchParams, Stack, useFocusEffect } from "expo-router";
 import { useRouletteDetail } from "../../../hooks/useRouletteStorage";
 import { ItemList } from "../../../components/items/ItemList";
 import { ItemFormModal } from "../../../components/items/ItemFormModal";
+import { BaseModal } from "../../../components/BaseModal";
 import { EmptyState } from "../../../components/ui/EmptyState";
 import type { RouletteItem } from "../../../types/roulette";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -32,6 +32,7 @@ export default function EditRouletteScreen() {
 
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<RouletteItem | null>(null);
+  const [deletingItem, setDeletingItem] = useState<RouletteItem | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -56,14 +57,15 @@ export default function EditRouletteScreen() {
 
   const handleDelete = (itemId: string) => {
     const item = roulette?.items.find((i) => i.id === itemId);
-    Alert.alert("Excluir Item", `Excluir "${item?.label}"?`, [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Excluir",
-        style: "destructive",
-        onPress: () => removeItem(itemId),
-      },
-    ]);
+    if (item) {
+      setDeletingItem(item);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deletingItem) return;
+    removeItem(deletingItem.id);
+    setDeletingItem(null);
   };
 
   if (isLoading || !roulette) {
@@ -130,6 +132,18 @@ export default function EditRouletteScreen() {
         initialColor={editingItem?.color}
         onSubmit={handleEditSubmit}
         onCancel={() => setEditingItem(null)}
+      />
+
+      <BaseModal
+        visible={!!deletingItem}
+        title="Excluir Item"
+        icon="delete"
+        confirmVariant="danger"
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        message={`Tem certeza que deseja excluir "${deletingItem?.label}"?`}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeletingItem(null)}
       />
     </View>
   );
