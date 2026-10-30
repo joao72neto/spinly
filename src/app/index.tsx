@@ -18,6 +18,7 @@ import type { Roulette } from "../types/roulette";
 import { Image } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import BaseModal from "@/components/BaseModal";
+import { RoulettePreview } from "../components/roulette/RoulettePreview";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -95,7 +96,7 @@ export default function HomeScreen() {
 
     return (
       <Pressable
-        style={styles.card}
+        style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
         onPress={() =>
           router.push({
             pathname: "/roulette/[id]",
@@ -103,29 +104,58 @@ export default function HomeScreen() {
           })
         }
       >
-        <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle}>{item.title}</Text>
-          <Text style={styles.cardCount}>
-            {activeCount}/{totalCount} itens
-          </Text>
-        </View>
-        <View style={styles.cardFooter}>
-          <Text style={styles.cardHint}>Toque para abrir</Text>
-          <View style={styles.cardActions}>
-            <Pressable
-              onPress={() => handleEdit(item)}
-              style={styles.cardActionButton}
-            >
-              <Feather name="edit-3" size={12} />
-              <Text>Editar</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => handleDelete(item)}
-              style={styles.cardActionButton}
-            >
-              <Feather name="trash-2" size={12} />
-              <Text>Excluir</Text>
-            </Pressable>
+        <View style={styles.cardContent}>
+          {/* Wheel preview avatar */}
+          <View style={styles.previewContainer}>
+            <RoulettePreview items={item.items} size={64} />
+          </View>
+
+          {/* Details & Actions */}
+          <View style={styles.cardBody}>
+            <View style={styles.cardHeader}>
+              <Text style={styles.cardTitle} numberOfLines={1}>
+                {item.title}
+              </Text>
+            </View>
+
+            <View style={styles.cardMeta}>
+              <View style={styles.countBadge}>
+                <Text style={styles.countBadgeText}>
+                  {activeCount}/{totalCount}{" "}
+                  {totalCount === 1 ? "item" : "itens"}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.cardFooter}>
+              <Text style={styles.cardHint}>Toque para abrir</Text>
+              <View style={styles.cardActions}>
+                <Pressable
+                  onPress={() => handleEdit(item)}
+                  style={({ pressed }) => [
+                    styles.actionButton,
+                    styles.editButton,
+                    pressed && styles.actionButtonPressed,
+                  ]}
+                  hitSlop={8}
+                  accessibilityLabel="Editar título da roleta"
+                >
+                  <Feather name="edit-3" size={15} color="#0284C7" />
+                </Pressable>
+                <Pressable
+                  onPress={() => handleDelete(item)}
+                  style={({ pressed }) => [
+                    styles.actionButton,
+                    styles.deleteButton,
+                    pressed && styles.actionButtonPressed,
+                  ]}
+                  hitSlop={8}
+                  accessibilityLabel="Excluir roleta"
+                >
+                  <Feather name="trash-2" size={15} color="#DC2626" />
+                </Pressable>
+              </View>
+            </View>
           </View>
         </View>
       </Pressable>
@@ -268,13 +298,31 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFFFFF",
     borderRadius: 16,
-    padding: 18,
+    padding: 14,
     marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#F1F5F9",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  cardPressed: {
+    opacity: 0.94,
+    transform: [{ scale: 0.995 }],
+  },
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+  },
+  previewContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cardBody: {
+    flex: 1,
   },
   cardHeader: {
     flexDirection: "row",
@@ -282,47 +330,60 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "700",
     color: "#1E293B",
     flex: 1,
   },
-  cardCount: {
-    fontSize: 13,
+  cardMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  countBadge: {
+    backgroundColor: "#F1F5F9",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  countBadgeText: {
+    fontSize: 12,
     color: "#64748B",
     fontWeight: "500",
-    marginLeft: 8,
   },
   cardFooter: {
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-  },
-  cardHint: {
-    color: "#64748B",
-    fontSize: 12,
-  },
-  cardActions: {
-    display: "flex",
-    flexDirection: "row",
-    gap: 10,
-    justifyContent: "space-between",
-    fontSize: 12,
-    color: "#94A3B8",
     marginTop: 8,
   },
-  cardActionButton: {
-    display: "flex",
+  cardHint: {
+    color: "#94A3B8",
+    fontSize: 11,
+  },
+  cardActions: {
     flexDirection: "row",
+    gap: 8,
     alignItems: "center",
-    gap: 2,
-    backgroundColor: "#CFCFCF",
-    paddingLeft: 12,
-    paddingTop: 3,
-    paddingBottom: 3,
-    paddingRight: 12,
+  },
+  actionButton: {
+    width: 34,
+    height: 34,
     borderRadius: 10,
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  actionButtonPressed: {
+    opacity: 0.7,
+  },
+  editButton: {
+    backgroundColor: "#E0F2FE",
+    borderColor: "#BAE6FD",
+  },
+  deleteButton: {
+    backgroundColor: "#FEE2E2",
+    borderColor: "#FECACA",
   },
   fab: {
     position: "absolute",
