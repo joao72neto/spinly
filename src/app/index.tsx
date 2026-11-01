@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { useRouter, Stack } from "expo-router";
 import { useFocusEffect } from "expo-router";
-import { useCallback } from "react";
 import { useRouletteList } from "../hooks/useRouletteStorage";
 import { EmptyState } from "../components/ui/EmptyState";
 import type { Roulette } from "../types/roulette";
@@ -19,6 +18,8 @@ import { Image } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import BaseModal from "@/components/BaseModal";
 import { RoulettePreview } from "../components/roulette/RoulettePreview";
+import { SearchBar } from "../components/SearchBar";
+import { normalizeText } from "../utils/string";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -37,6 +38,15 @@ export default function HomeScreen() {
     null,
   );
   const [rouletteTitle, setRouletteTitle] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredRoulettes = useMemo(() => {
+    const query = normalizeText(searchQuery.trim());
+    if (!query) return roulettes;
+    return roulettes.filter((roulette) =>
+      normalizeText(roulette.title).includes(query),
+    );
+  }, [roulettes, searchQuery]);
 
   // Reload data whenever the screen gains focus
   useFocusEffect(
@@ -184,15 +194,31 @@ export default function HomeScreen() {
           ),
         }}
       />
+      {roulettes.length > 0 && (
+        <View style={styles.searchContainer}>
+          <SearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Pesquisar roletas..."
+          />
+        </View>
+      )}
+
       {roulettes.length === 0 ? (
         <EmptyState
           icon="🎰"
           title="Nenhuma roleta criada"
           message="Crie sua primeira roleta para começar a sortear!"
         />
+      ) : filteredRoulettes.length === 0 ? (
+        <EmptyState
+          icon="🔍"
+          title="Nenhuma roleta encontrada"
+          message={`Nenhum resultado para "${searchQuery}". Tente outro termo.`}
+        />
       ) : (
         <FlatList
-          data={roulettes}
+          data={filteredRoulettes}
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
           contentContainerStyle={styles.list}
@@ -291,8 +317,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  searchContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
   list: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 12,
     paddingBottom: 100,
   },
   card: {
