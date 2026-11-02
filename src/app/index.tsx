@@ -262,13 +262,7 @@ export default function HomeScreen() {
               }
             />
             <View style={styles.modalActions}>
-              <Pressable
-                style={styles.modalCancel}
-                onPress={() => {
-                  setShowCreateEditModal(false);
-                  setRouletteTitle("");
-                }}
-              >
+              <Pressable style={styles.modalCancel} onPress={handleCloseModal}>
                 <Text style={styles.modalCancelText}>Cancelar</Text>
               </Pressable>
               <Pressable
