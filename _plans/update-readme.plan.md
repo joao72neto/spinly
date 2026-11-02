@@ -9,7 +9,7 @@ O objetivo é fornecer uma visão clara e direta do aplicativo para novos desenv
 1. **Descrição inicial do projeto** (propósito do Spinly e principais funcionalidades).
 2. **Tecnologias utilizadas** (React Native, Expo SDK 58, Expo Router, TypeScript, etc.).
 3. **Passos para rodar localmente** (instalação de dependências e execução no Android, iOS e Web).
-4. **Download do APK (Release Android)**: Link direto para o arquivo gerado em [`android/app/build/outputs/apk/release/app-release.apk`](file:///home/savior/coding/spinly/android/app/build/outputs/apk/release/app-release.apk) com orientações práticas para instalação local no dispositivo.
+4. **Download do APK (Release Android)**: Link direto para o arquivo versionado em [`apk/spinly-v0.1.0.apk`](file:///home/savior/coding/spinly/apk/spinly-v0.1.0.apk) com orientações práticas para instalação local no dispositivo.
 
 ---
 
@@ -120,18 +120,18 @@ O **Spinly** é um aplicativo móvel para tomada de decisões aleatórias de for
 
 Você pode baixar a versão de release diretamente pelo link abaixo:
 
-👉 **[Download APK Release (app-release.apk)](./android/app/build/outputs/apk/release/app-release.apk)**
+👉 **[Download APK Release (spinly-v0.1.0.apk)](./apk/spinly-v0.1.0.apk)**
 
 ### Como instalar no Android:
 
 1. **Pelo Computador (via ADB):**
+
    ```bash
-   adb install android/app/build/outputs/apk/release/app-release.apk
+   adb install apk/spinly-v0.1.0.apk
    ```
-````
 
 2. **Direto no Smartphone:**
-   - Transfira o arquivo `app-release.apk` para o seu aparelho (via cabo USB, nuvem ou mensageiro).
+   - Transfira o arquivo `spinly-v0.1.0.apk` da pasta `apk/` para o seu aparelho (via cabo USB, nuvem ou mensageiro).
    - Abra o arquivo no gerenciador de arquivos do celular e autorize a instalação de fontes desconhecidas caso solicitado.
 
 ---
@@ -203,3 +203,4 @@ O arquivo gerado estará disponível em `android/app/build/outputs/apk/release/a
 - Confirmar se o link relativo aponta corretamente para `android/app/build/outputs/apk/release/app-release.apk`.
 - Checar se os comandos correspondem aos scripts do [`package.json`](file:///home/savior/coding/spinly/package.json).
 ```
+````

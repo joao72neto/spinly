@@ -31,18 +31,18 @@ O **Spinly** é um aplicativo móvel para tomada de decisões aleatórias de for
 
 Você pode baixar a versão de release diretamente pelo link abaixo:
 
-👉 **[Download APK Release (app-release.apk)](./android/app/build/outputs/apk/release/app-release.apk)**
+👉 **[Download APK Release (spinly-v0.1.0.apk)](./apk/spinly-v0.1.0.apk)**
 
 ### Como instalar no Android:
 
 1. **Pelo Computador (via ADB):**
 
    ```bash
-   adb install android/app/build/outputs/apk/release/app-release.apk
+   adb install apk/spinly-v0.1.0.apk
    ```
 
 2. **Direto no Smartphone:**
-   - Transfira o arquivo `app-release.apk` para o seu aparelho (via cabo USB, nuvem ou mensageiro).
+   - Transfira o arquivo `spinly-v0.1.0.apk` da pasta `apk/` para o seu aparelho (via cabo USB, nuvem ou mensageiro).
    - Abra o arquivo no gerenciador de arquivos do celular e autorize a instalação de fontes desconhecidas caso solicitado.
 
 ---
@@ -101,4 +101,8 @@ cd android
 ./gradlew assembleRelease
 ```
 
-O arquivo gerado estará disponível em `android/app/build/outputs/apk/release/app-release.apk`.
+O arquivo gerado pode ser copiado para a pasta `apk/`:
+
+```bash
+cp app/build/outputs/apk/release/app-release.apk ../apk/spinly-v0.1.0.apk
+```
