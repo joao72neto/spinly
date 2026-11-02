@@ -1,4 +1,4 @@
-# Plano de Implementação: Aplicativo de Roleta (Spin & Decide)
+# Plano de Implementação: Aplicativo de Roleta (Spinly)
 
 Este documento detalha o planejamento arquitetural, estrutural e as etapas de implementação para o desenvolvimento do aplicativo de Roleta baseado na especificação descrita em `_specs/roulette.spec.md`.
 

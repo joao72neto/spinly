@@ -1,4 +1,4 @@
-# Especificação de Requisitos: Aplicativo de Roleta (Spin & Decide)
+# Especificação de Requisitos: Aplicativo de Roleta (Spinly)
 
 ## Contexto Geral
 
